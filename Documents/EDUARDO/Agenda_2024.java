@@ -1,6 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
 
 package org.educastur.eduardocl.agenda_2024;
 
@@ -10,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-/**
- *
- * @author edu
- */
 public class Agenda_2024 {
 
      //DECLARO UN ARRAYLIST llamado contactos como atributo de la clase Agenda2024
