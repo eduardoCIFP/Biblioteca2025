@@ -7,7 +7,7 @@ package org.educastur.eduardocl.biblioteca2025;
 import java.util.ArrayList;
 
 /**
- *
+ * Este es el proyecto de la biblioteca
  * @author eduardo
  */
 public class Biblioteca2025 {
