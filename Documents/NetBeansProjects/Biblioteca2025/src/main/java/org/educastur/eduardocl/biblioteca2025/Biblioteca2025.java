@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 /**
  * Este es el proyecto de la biblioteca
  * @author eduardo
@@ -166,6 +167,9 @@ public class Biblioteca2025 {
     }
 
     private void listaLibros() {
+        for (Libro l : libros) {
+            System.out.println(l);
+        }
     }
     
 //</editor-fold>
@@ -186,6 +190,23 @@ public class Biblioteca2025 {
 
     //<editor-fold defaultstate="collapsed" desc="GESTION PRESTAMOS">
     private void nuevoPrestamo() {
+        System.out.println("Identificación del usuario:");
+        int posUsuario = buscaDni(solicitaDni());
+        if (posUsuario==-1){
+            System.out.println("No es aún usuario de la biblioteca");
+        }else{
+            System.out.println("Identificación del libro:"); 
+            int posLibro=buscaIsbn(solicitaIsbn());
+            if (posLibro==-1){
+                System.out.println("El ISBN pertenece a un libro inexistente");
+            } else if (libros.get(posLibro).getEjemplares()>0){
+                LocalDate hoy=LocalDate.now();
+                prestamos.add(new Prestamo(libros.get(posLibro),usuarios.get(posUsuario),hoy,hoy.plusDays(15)));
+                libros.get(posLibro).setEjemplares(libros.get(posLibro).getEjemplares()-1);
+                }else{
+                    System.out.println("No quedan unidades disponibles del libro");
+                }
+        }
     }
 
     private void eliminarPrestamo() {
@@ -195,10 +216,66 @@ public class Biblioteca2025 {
     }
 
     private void listaPrestamos() {
+        for (Prestamo p : prestamos) {
+            System.out.println(p);  
+        }
     }
 //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="METODOS AUXILIARES">
+    /**
+     * Método para solicitar por teclado el DNI de un usuario. pdte de validación
+     * @return (String) dni del usuario tecleado
+     */
+    public String solicitaDni(){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Teclea el dni del usuario:");
+        String dni=sc.next();
+        return dni;
+    }
+    /**
+     * Método para solicitar por teclado el ISBN de un libro. pdte de validación
+     * @return (String) isbn del libro tecleado
+     */
+    public String solicitaIsbn(){
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Teclea el isbn del libro:");
+        String isbn=sc.next();
+        return isbn;
+    }
+    
+    /**
+     * Método para buscar un dni en la colección usuarios
+     * @param dni (String) del usuario a buscar en la colección
+     * @return posición (int) del usuario en el Arraylist, valor -1 si no se encuentra
+     */
+    public int buscaDni(String dni){
+        int pos=-1;
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getDni().equals(dni)){
+                pos=i;
+                break;
+            }
+        }
+        return pos;       
+    }
+    
+     /**
+     * Método para buscar un libro en la colección libros
+     * @param isbn (String) del libro a buscar en la colección
+     * @return posición (int) del libro el Arraylist, valor -1 si no se encuentra
+     */
+    public int buscaIsbn(String isbn){
+        int pos=-1;
+        for (int i = 0; i < libros.size(); i++) {
+            if (libros.get(i).getIsbn().equals(isbn)){
+                pos=i;
+                break;
+            }
+        }
+        return pos;       
+    }
+    
     public void cargaDatos(){
         libros.add(new Libro("1-11","El Hobbit","JRR Tolkien","Aventuras",3)); 
         libros.add(new Libro("1-22","El Silmarillon","JRR Tolkien","Aventuras",3)); 
@@ -208,7 +285,7 @@ public class Biblioteca2025 {
         libros.add(new Libro("1-66","Paraíso inhabitado","A.M.Matute","Aventuras",2)); 
         libros.add(new Libro("1-77","Olvidado Rey Gudú","A.M.Matute","Aventuras",2)); 
         libros.add(new Libro("1-88","El último barco","D.Villar","Novela Negra",3)); 
-        libros.add(new Libro("1-99","Ojos de agua","D.Villar","Novela Negra",2)); 
+        libros.add(new Libro("1-99","Ojos de agua","D.Villar","Novela Negra",0)); 
 
         usuarios.add(new Usuario("11","Ana","ana@email.com","621111111")); 
         usuarios.add(new Usuario("22","David","david@email.com","622222222")); 
