@@ -129,8 +129,8 @@ public class Biblioteca2025 {
         do{
             System.out.println("\n\n\n\n\n\t\t\t\tPRESTAMOS\n");
             System.out.println("\t\t\t\t1 - NUEVO PRESTAMO");
-            System.out.println("\t\t\t\t2 - ELIMINAR PRESTAMO");
-            System.out.println("\t\t\t\t3 - MODIFICAR PRESTAMO");
+            System.out.println("\t\t\t\t2 - DEVOLUCIÓN PRESTAMO");
+            System.out.println("\t\t\t\t3 - PRORROGAR PRESTAMO");
             System.out.println("\t\t\t\t4 - LISTADOS");
             System.out.println("\t\t\t\t9 - SALIR");
             opcion=sc.nextInt();
@@ -140,11 +140,11 @@ public class Biblioteca2025 {
                     break;
                 }    
                 case 2:{
-                    eliminarPrestamo();
+                    devolucion();
                     break;
                 } 
                 case 3:{
-                    modificarPrestamo();
+                    prorroga();
                     break;
                 } 
                 case 4:{
@@ -208,11 +208,30 @@ public class Biblioteca2025 {
                 }
         }
     }
-
-    private void eliminarPrestamo() {
+    private void devolucion() {
+        System.out.println("Datos para la prórroga del préstamo:");
+        String isbnLibro=solicitaIsbn();
+        int pos=buscaPrestamo(solicitaDni(),isbnLibro);
+        if (pos==-1){
+            System.out.println("No hay ningún préstamo con esos datos");
+        }else{
+            prestamos.get(pos).setFechaDev(LocalDate.now());
+            libros.get(buscaIsbn(isbnLibro))
+              .setEjemplares(libros.get(buscaIsbn(isbnLibro)).getEjemplares()+1);
+        }
     }
-
-    private void modificarPrestamo() {
+    private void prorroga() {
+        System.out.println("Datos para la prórroga del préstamo:");
+        
+        String dni = solicitaDni();
+        String isbn = solicitaIsbn();
+        int pos=buscaPrestamo(dni,isbn);
+        //int pos=buscaPrestamo(solicitaDni(),solicitaIsbn());
+        if (pos==-1){
+            System.out.println("No hay ningún préstamo con esos datos");
+        }else{
+            prestamos.get(pos).setFechaDev(prestamos.get(pos).getFechaDev().plusDays(15));
+        }
     }
 
     private void listaPrestamos() {
@@ -275,8 +294,28 @@ public class Biblioteca2025 {
         }
         return pos;       
     }
+     /**
+     * Método para buscar un préstamo en la colección préstamos
+     * @param dni (String) del usuario que realizó el préstamo
+     * @param isbn (String) del libro prestado
+     * @return posición (int) del préstamo en el Arraylist, 
+     *         valor -1 si no se encuentra un préstamo con esos datos
+     */
+    public int buscaPrestamo(String dni, String isbn){
+        int pos=-1;
+        for (int i = 0; i < prestamos.size(); i++) {
+            if (prestamos.get(i).getUsuarioPrest().getDni().equals(dni)
+                && prestamos.get(i).getLibroPrest().getIsbn().equals(isbn)){   
+                pos=i;
+                break;
+            }
+        }
+        return pos;       
+    }
+    
     
     public void cargaDatos(){
+        
         libros.add(new Libro("1-11","El Hobbit","JRR Tolkien","Aventuras",3)); 
         libros.add(new Libro("1-22","El Silmarillon","JRR Tolkien","Aventuras",3)); 
         libros.add(new Libro("1-33","El Médico","N. Gordon","Aventuras",4)); 
@@ -285,7 +324,8 @@ public class Biblioteca2025 {
         libros.add(new Libro("1-66","Paraíso inhabitado","A.M.Matute","Aventuras",2)); 
         libros.add(new Libro("1-77","Olvidado Rey Gudú","A.M.Matute","Aventuras",2)); 
         libros.add(new Libro("1-88","El último barco","D.Villar","Novela Negra",3)); 
-        libros.add(new Libro("1-99","Ojos de agua","D.Villar","Novela Negra",0)); 
+        libros.add(new Libro("1-99","Ojos de agua","D.Villar","Novela Negra",9
+        )); 
 
         usuarios.add(new Usuario("11","Ana","ana@email.com","621111111")); 
         usuarios.add(new Usuario("22","David","david@email.com","622222222")); 
@@ -301,18 +341,6 @@ public class Biblioteca2025 {
         prestamos.add(new Prestamo(libros.get(5),usuarios.get(0), hoy,hoy.plusDays(15)));
         prestamos.add(new Prestamo(libros.get(6),usuarios.get(2), hoy,hoy.plusDays(15)));
         prestamos.add(new Prestamo(libros.get(2),usuarios.get(1), hoy,hoy.plusDays(15)));
-    
-        for (Libro l:libros) {
-            System.out.println(l);
-        }
-        System.out.println("");
-        for (Usuario u:usuarios) {
-            System.out.println(u);
-        }
-        System.out.println("");
-        for (Prestamo p:prestamos) {
-            System.out.println(p);
-        }
     }
 //</editor-fold>
    
