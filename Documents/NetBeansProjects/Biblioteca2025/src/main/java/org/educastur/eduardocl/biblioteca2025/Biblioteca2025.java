@@ -32,6 +32,10 @@ public class Biblioteca2025 {
        b.fueraPlazo();
        b.menu();
     }
+     public static void Yuguero {
+       System.out.println("Nueva modificacion")
+    }
+    
     
     //<editor-fold defaultstate="collapsed" desc="MENUS">
     public void menu(){
