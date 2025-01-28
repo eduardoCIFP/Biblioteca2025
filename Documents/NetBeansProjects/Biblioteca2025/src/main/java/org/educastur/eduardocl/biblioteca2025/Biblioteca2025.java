@@ -10,6 +10,7 @@ import java.util.Scanner;
 /**
  * Este es el proyecto de la biblioteca
  * @author eduardo
+ * Modificado por Jonatan Yuguero Strunilina
  */
 public class Biblioteca2025 {
  
